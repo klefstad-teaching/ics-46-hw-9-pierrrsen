@@ -4,7 +4,7 @@ using namespace std;
 int main() {
     set<string> s;
     load_words(s, "small.txt");
-    for (const string& element : s) {
-        cout << element << " ";
-    }
+    
+    if (edit_distance_within("cat", "bits", 2))
+        cout << "Valid" << endl;
 }
