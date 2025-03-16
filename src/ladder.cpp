@@ -28,7 +28,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             else {
                 m[i][j] = 1 + min({m[i - 1][j], m[i][j-1], m[i-1][j-1]});
             }
-            if (m[i][j] > d) return false;
+            //if (m[i][j] > d) return false;
         }
     }
 
@@ -58,7 +58,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         error(begin_word, end_word, "| Cannot find ladder for same words");
         return {};
     }
-    if (word_list.find(end_word) == end_word) {
+    if (word_list.find(end_word) != word_list.end()) {
         map<string, vector<string>> neighbors = compute_neighbors(word_list);
         queue<vector<string>> ladder_queue;
         set<string> visited;
