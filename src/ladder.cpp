@@ -44,8 +44,6 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     if (begin_word == end_word) {
         error(begin_word, end_word, "| Cannot find ladder for same words");
         return {};
-        if (word_list.size() > 0)
-            return {};
     }
 
     queue<vector<string>> ladder_queue;
@@ -55,9 +53,22 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     visited.insert(begin_word);
 
     while (!ladder_queue.empty()) {
-        
+        vector<string> ladder = ladder_queue.front();
+        ladder.pop();
+        string lastWord = ladder.back();
+        for (word : word_list) {
+            if (is_adjacent(last_word, word)) {
+                if (!visited.find(word)){
+                    visited.insert(word);
+                    vector<string> new_ladder = ladder;
+                    new_ladder.push_back(word);
+                    if (word = end_word)
+                        return new_ladder;
+                    ladder_queue.push(new_ladder);
+                }
+            }
+        }
     }
-    
     return {};
 }
 
@@ -75,5 +86,13 @@ void load_words(set<string> & word_list, const string& file_name) {
     inputFile.close();
 }
 
-void print_word_ladder(const vector<string>& ladder);
-void verify_word_ladder();
+void print_word_ladder(const vector<string>& ladder) {
+    for (word : ladder)
+        cout << word << ", ";
+}
+
+void verify_word_ladder() {
+    for (size_t i = 1; i < ) {
+
+    }
+}
