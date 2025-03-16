@@ -24,12 +24,10 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     for (int i = 1; i <= len1; ++i) {
         for (int j = 1; j <= len2; ++j) {
             if (str1[i - 1] == str2[j - 1])
-                m[i][j] = m[i - 1][i - 1];
+                m[i][j] = m[i - 1][j - 1];
             else {
                 m[i][j] = 1 + min({m[i - 1][j], m[i][j-1], m[i-1][j-1]});
             }
-
-            if (m[i][j] > d) return false;
         }
     }
 
