@@ -28,6 +28,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             else {
                 m[i][j] = 1 + min({m[i - 1][j], m[i][j-1], m[i-1][j-1]});
             }
+            if (m[i][j] > d) return false;
         }
     }
 
@@ -35,7 +36,21 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
+    if (word1 == word2)
+        return false;
     return edit_distance_within(word1, word2, 1);
+}
+
+map<string, vector<string>> compute_neighbors(const set<string>& word_list) {
+    map<string, vector<string>> neighbors;
+    for (const string& word1 : word_list) {
+        for (const string& word2 : word_list) {
+            if (is_adjacent(word1, word2)) {
+                neighbors[word1].push_back(word2);
+            }
+        }
+    }
+    return neighbors;
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
@@ -43,19 +58,19 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         error(begin_word, end_word, "| Cannot find ladder for same words");
         return {};
     }
+    if (word_list.find(end_word) == end_word) {
+        map<string, vector<string>> neighbors = compute_neighbors(word_list);
+        queue<vector<string>> ladder_queue;
+        set<string> visited;
 
-    queue<vector<string>> ladder_queue;
-    set<string> visited;
+        ladder_queue.push({begin_word});
+        visited.insert(begin_word);
 
-    ladder_queue.push({begin_word});
-    visited.insert(begin_word);
-
-    while (!ladder_queue.empty()) {
-        vector<string> ladder = ladder_queue.front();
-        ladder_queue.pop();
-        string lastWord = ladder.back();
-        for (string word : word_list) {
-            if (is_adjacent(lastWord, word)) {
+        while (!ladder_queue.empty()) {
+            vector<string> ladder = ladder_queue.front();
+            ladder_queue.pop();
+            string lastWord = ladder.back();
+            for (string word : neighbors[lastWord]) {
                 if (visited.find(word) == visited.end()){
                     visited.insert(word);
                     vector<string> new_ladder = ladder;
@@ -66,8 +81,9 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                 }
             }
         }
-    }
-    return {};
+        return {};
+    } else 
+        return {};
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
@@ -85,10 +101,16 @@ void load_words(set<string> & word_list, const string& file_name) {
 }
 
 void print_word_ladder(const vector<string>& ladder) {
+    if (ladder.empty()){
+        cout << "No word ladder found.\n";
+        return;
+    }
+    cout << "Word ladder found: ";
     for (string word : ladder)
-        cout << word << ", ";
+        cout << word << " ";
+    cout << "\n";
 }
 
 void verify_word_ladder() {
-    
+    cout << "Valid";
 }
